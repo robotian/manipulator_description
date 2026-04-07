@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="gen3_lite_custom_gripper">
+
+  <xacro:include filename="$(find manipulator_description)/urdf/arm.urdf.xacro"/>
+  <xacro:include filename="$(find manipulator_description)/urdf/custom_gripper.urdf.xacro"/>
+
+  <!-- <link name="world"/> -->
+
+  <xacro:kinova_gen3_lite 
+    name="arm" 
+    parent_link="top_plate_mount_e9" 
+    gripper_joint_name="kortex_internal_gripper_unused">
+    <origin xyz="0 0 0.0546" rpy="0 0 3.14159"/>
+  </xacro:kinova_gen3_lite>
+
+  <xacro:load_gripper 
+    name="arm_gripper" 
+    parent_link="arm_end_effector_link" 
+    gripper_port="/dev/ttyUSB1">
+    <!-- <origin xyz="0 0 0.04" rpy="-1.57 0 3.14"/> -->
+    <origin xyz="0 0 0.04" rpy="-1.57 0 4.69219755"/>
+  </xacro:load_gripper>
+
+</robot>

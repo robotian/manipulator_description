@@ -1,0 +1,317 @@
+<?xml version="1.0"?>
+<robot name="custom_gripper" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:arg name="use_fake_hardware" default="false"/>
+  <xacro:arg name="use_manipulation_controllers" default="false"/>
+
+  <xacro:macro name="load_gripper" params="
+    name
+    parent_link
+    *origin
+    use_fake_hardware:=$(arg use_fake_hardware)
+    use_controllers:=$(arg use_manipulation_controllers)
+    fake_sensor_commands:=false
+    gripper_port:=/dev/ttyUSB1">
+
+    <joint name="${name}_gripper_base_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent_link}" />
+      <child link="${name}_gripper_base_link" />
+    </joint>
+
+    <link name="${name}_gripper_base_link">
+      <inertial>
+        <origin xyz="0.003851 0.011455 -0.010386" rpy="0 0 0"/>
+        <mass value="0.46003"/>
+        <inertia ixx="0.00043" iyy="0.000419" izz="0.000416" ixy="3.2e-05" iyz="0.000129" ixz="-5e-06"/>
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://manipulator_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="">
+          <color rgba="0.803 0.824 0.820 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://manipulator_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${name}_gripper_support_link_1_1">
+      <inertial>
+        <origin xyz="-0.01006 0.015494 -0.004434" rpy="0 0 0"/>
+        <mass value="0.087935"/>
+        <inertia ixx="7.1e-05" iyy="8e-06" izz="7.3e-05" ixy="5e-06" iyz="-3e-06" ixz="-1e-06"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.033377 -0.000206 -0.000306" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://manipulator_description/meshes/gripper_support_link_1_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="">
+          <color rgba="0.803 0.824 0.820 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0.033377 -0.000206 -0.000306" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://manipulator_description/meshes/gripper_support_link_1_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${name}_gripper_support_top_link_1_1">
+      <inertial>
+        <origin xyz="-0.008794 0.003256 0.0015" rpy="0 0 0"/>
+        <mass value="0.029549"/>
+        <inertia ixx="3.1e-05" iyy="1e-06" izz="3.2e-05" ixy="1e-06" iyz="0.0" ixz="-0.0"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.034877 -0.004199 -0.008806" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://manipulator_description/meshes/gripper_support_top_link_1_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="">
+          <color rgba="0.803 0.824 0.820 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0.034877 -0.004199 -0.008806" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://manipulator_description/meshes/gripper_support_top_link_1_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${name}_finger_top_link_1_1">
+      <inertial>
+        <origin xyz="0.021015 -0.004532 -0.002669" rpy="0 0 0"/>
+        <mass value="0.017101"/>
+        <inertia ixx="1e-06" iyy="9e-06" izz="9e-06" ixy="0.0" iyz="0.0" ixz="0.0"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.046627 0.046648 -0.008806" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://manipulator_description/meshes/finger_top_link_1_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="">
+          <color rgba="0.803 0.824 0.820 1" />
+        </material> 
+      </visual>
+      <collision>
+        <origin xyz="0.046627 0.046648 -0.008806" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://manipulator_description/meshes/finger_top_link_1_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>
+    </link>
+    <link name="${name}_finger_center_link_1_1">
+      <inertial>
+        <origin xyz="0.022068392352812497 0.0070510858397516835 -0.003999887406621109" rpy="0 0 0"/>
+        <mass value="0.03227476437530165"/>
+        <inertia ixx="3e-06" iyy="1.3e-05" izz="1.6e-05" ixy="-6e-06" iyz="-0.0" ixz="-0.0"/>
+      </inertial>
+      <visual>
+        <origin xyz="-0.012832 0.054688 -0.004806" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://manipulator_description/meshes/finger_center_link_1_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="">
+          <color rgba="0.803 0.824 0.820 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="-0.012832 0.054688 -0.004806" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://manipulator_description/meshes/finger_center_link_1_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${name}_finger_bottom_link_1_1">
+      <inertial>
+        <origin xyz="0.021028 -0.004469 0.002669" rpy="0 0 0"/>
+        <mass value="0.037101"/>
+        <inertia ixx="1e-06" iyy="9e-06" izz="9e-06" ixy="0.0" iyz="-0.0" ixz="-0.0"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.046727 0.046641 0.007194" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://manipulator_description/meshes/finger_bottom_link_1_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="">
+          <color rgba="0.803 0.824 0.820 1" />
+        </material>         
+      </visual>
+      <collision>
+        <origin xyz="0.046727 0.046641 0.007194" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://manipulator_description/meshes/finger_bottom_link_1_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${name}_scessor_scew_link_1">
+      <inertial>
+        <origin xyz="0 0 -0.003624" rpy="0 0 0"/>
+        <mass value="0.002502"/>
+        <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="0.0"/>
+      </inertial>
+      <visual>
+        <origin xyz="-0.002637 -0.038862 0.043171" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://manipulator_description/meshes/scessor_scew_link_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="">
+          <color rgba="0.803 0.824 0.820 1" />
+        </material> 
+      </visual>
+      <collision>
+        <origin xyz="-0.002637 -0.038862 0.043171" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://manipulator_description/meshes/scessor_scew_link_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${name}_left_scissor_link_1">
+      <inertial>
+        <origin xyz="0.001848 -0.000941 -0.000861" rpy="0 0 0"/>
+        <mass value="0.035626"/>
+        <inertia ixx="0.00009" iyy="0.00009" izz="0.0001" ixy="-4.3e-05" iyz="0.0" ixz="0.0"/>
+      </inertial>
+      <visual>
+        <origin xyz="-0.002637 -0.038862 0.049951" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://manipulator_description/meshes/left_scissor_link_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="">
+          <color rgba="0.803 0.824 0.820 1" />
+        </material>       
+      </visual>
+      <collision>
+        <origin xyz="-0.002637 -0.038862 0.049951" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://manipulator_description/meshes/left_scissor_link_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>
+    </link>
+    <link name="${name}_right_scissor_link_1">
+      <inertial>
+        <origin xyz="-0.001802206544559732 -0.0010244558441290658 -0.0008878817579383441" rpy="0 0 0"/>
+        <mass value="0.035626025175002775"/>
+        <inertia ixx="8.2e-05" iyy="2.6e-05" izz="0.000108" ixy="4.6e-05" iyz="-0.0" ixz="0.0"/>
+      </inertial>
+      <visual>
+        <origin xyz="-0.002637 -0.038862 0.049951" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://manipulator_description/meshes/right_scissor_link_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="">
+          <color rgba="0.803 0.824 0.820 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="-0.002637 -0.038862 0.049951" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://manipulator_description/meshes/right_scissor_link_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>
+    </link>
+
+
+    <joint name="${name}_gripper_support_joint" type="fixed">
+      <origin xyz="-0.033377 0.000206 0.000306" rpy="0 0 0"/>
+      <parent link="${name}_gripper_base_link"/>
+      <child link="${name}_gripper_support_link_1_1"/>
+    </joint>
+
+    <joint name="${name}_top_gripper_support_joint" type="fixed">
+      <origin xyz="-0.0015 0.003993 0.0085" rpy="0 0 0"/>
+      <parent link="${name}_gripper_support_link_1_1"/>
+      <child link="${name}_gripper_support_top_link_1_1"/>
+    </joint>
+
+    <joint name="${name}_right_finger_joint" type="revolute">
+      <origin xyz="-0.01175 -0.050847 0.0" rpy="0 0 0"/>
+      <parent link="${name}_gripper_support_top_link_1_1"/>
+      <child link="${name}_finger_top_link_1_1"/>
+      <axis xyz="0 0 1"/>
+      <limit upper="1.658063" lower="0.0" effort="100" velocity="100"/>
+    </joint>
+
+    <joint name="${name}_center_finger_joint" type="fixed">
+      <origin xyz="0.059459 -0.00804 -0.004" rpy="0 0 0"/>
+      <parent link="${name}_finger_top_link_1_1"/>
+      <child link="${name}_finger_center_link_1_1"/>
+    </joint>
+
+
+    <joint name="${name}_left_finger_joint" type="revolute">
+      <origin xyz="-0.01335 -0.046847 -0.0075" rpy="0 0 0"/>
+      <parent link="${name}_gripper_support_link_1_1"/>
+      <child link="${name}_finger_bottom_link_1_1"/>
+      <axis xyz="0 0 1"/>
+      <limit upper="1.658063" lower="-0.1" effort="100" velocity="100"/>
+      <mimic joint="${name}_right_finger_joint" multiplier="1.0" offset="0.0"/>
+    </joint>
+    <joint name="${name}_right_scissors_joint" type="fixed">
+      <origin xyz="0.0 0.0 -0.00678" rpy="0 0 0"/>
+      <parent link="${name}_scessor_scew_link_1"/>
+      <child link="${name}_right_scissor_link_1"/>
+    </joint>
+        
+
+    <joint name="${name}_scissors_con_joint" type="fixed">
+      <origin xyz="0.002637 0.038862 -0.043171" rpy="0 0 0"/>
+      <parent link="${name}_gripper_base_link"/>
+      <child link="${name}_scessor_scew_link_1"/>
+    </joint>
+
+    <joint name="${name}_left_scissors_screw_joint" type="revolute">
+      <origin xyz="0.0 0.0 -0.00678" rpy="0 0 0"/>
+      <parent link="${name}_scessor_scew_link_1"/>
+      <child link="${name}_left_scissor_link_1"/>
+      <axis xyz="0 0 -1"/>
+      <limit upper="0.785398" lower="-0.087266" effort="100" velocity="100"/>
+    </joint>
+
+    <xacro:if value="${use_controllers}">
+      <ros2_control name="${name}_hardware" type="system">
+        <hardware>
+          <xacro:if value="${use_fake_hardware}">
+            <plugin>mock_components/GenericSystem</plugin>
+            <param name="fake_sensor_commands">${fake_sensor_commands}</param>
+            <param name="state_following_offset">0.0</param>
+          </xacro:if>
+          <xacro:unless value="${use_fake_hardware}">
+              <plugin>esp32_gripper_driver/Esp32GripperHardware</plugin>
+              <param name="device">/dev/ttyUSB1</param>
+              <param name="port">${gripper_port}</param>
+          </xacro:unless>
+        </hardware>
+
+        <joint name="${name}_right_finger_joint">
+          <command_interface name="position" />
+          <state_interface name="position">
+            <param name="initial_value">0.0</param>
+          </state_interface>
+          <state_interface name="velocity"/>
+        </joint>
+        <joint name="${name}_left_scissors_screw_joint">
+          <command_interface name="position" />
+          <state_interface name="position">
+            <param name="initial_value">0.0</param>
+          </state_interface>
+          <state_interface name="velocity"/>
+        </joint>
+
+      </ros2_control>
+    </xacro:if>
+
+  </xacro:macro>
+</robot>

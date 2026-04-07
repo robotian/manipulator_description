@@ -6,7 +6,7 @@ from launch.substitutions import (Command, FindExecutable,
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
 
-# test comment
+# test comment: from remote
 def generate_launch_description():
     # Launch Configurations
     setup_path = LaunchConfiguration('setup_path')

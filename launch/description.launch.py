@@ -28,7 +28,7 @@ def generate_launch_description():
 
     # Paths
     robot_urdf = PathJoinSubstitution([
-        setup_path, 'robot.urdf.xacro'])
+        setup_path, 'gen3_custom_gripper.urdf.xacro'])
 
     # Get URDF via xacro
     arg_robot_description_command = DeclareLaunchArgument(

@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="gen3_lite_custom_gripper">
+
+  <xacro:include filename="$(find gen3_gripper_description)/urdf/gen3.urdf.xacro"/>
+  <xacro:include filename="$(find gen3_gripper_description)/urdf/gen3_gripper.xacro"/>
+  <xacro:include filename="$(find realsense2_description)/urdf/_d405.urdf.xacro"/>
+
+  <link name="world"/> 
+  
+
+  <xacro:kinova_gen3_7dof
+    name="arm"
+    parent_link="world"
+    gripper_joint_name="kortex_internal_gripper_unused">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </xacro:kinova_gen3_7dof>
+
+  <xacro:gen3_custom_gripper
+    name="arm_gripper"
+    parent_link="arm_end_effector_link"
+    gripper_port="/dev/ttyUSB_ESP32">
+    <origin xyz="0 0 0.0" rpy="1.5708 0 3.14159"/>
+  </xacro:gen3_custom_gripper>
+
+  <!--
+    Intel RealSense D405 mounted on the bracelet link.
+    name="camera" must match the realsense2_camera driver's camera_name
+    so that image header frame IDs (camera_color_optical_frame, etc.) align
+    with the URDF-published TF.  Set publish_tf:=false in the driver launch
+    to avoid duplicate TF from robot_state_publisher.
+
+    ADJUST the origin xyz/rpy to match your physical bracket:
+      - xyz: position of the D405 bottom-screw mount relative to arm_bracelet_link
+      - rpy="0 ${pi/2} 0": rotates the camera so its lens (+x in camera_link)
+        faces in the bracelet -z direction (toward the gripper / workspace).
+  -->
+  <xacro:sensor_d405
+    parent="arm_end_effector_link"
+    name="camera"
+    use_nominal_extrinsics="true">
+    <!-- <origin xyz="0 0.05639 0.01305" rpy="${pi/2} ${pi/2} 0"/> -->
+    <origin xyz="0 0.07239 -0.03805" rpy="0 -${pi/2} -${pi/2}"/>
+    <!-- <origin xyz="0 0.05639 -0.00305" rpy="0 ${pi/2} 0"/> -->
+  </xacro:sensor_d405>
+
+</robot>

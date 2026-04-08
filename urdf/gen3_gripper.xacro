@@ -1,0 +1,301 @@
+<?xml version="1.0" ?>
+<robot name="gen3_gripper" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<xacro:include filename="$(find gen3_customgripper_description)/urdf/materials.xacro" />
+  <xacro:arg name="is_sim" default="false"/>
+  <xacro:arg name="use_fake_hardware" default="false"/>
+  <xacro:arg name="use_manipulation_controllers" default="false"/>
+  <xacro:macro name="gen3_custom_gripper" params="
+    name
+    parent_link
+    *origin
+    use_fake_hardware:=$(arg use_fake_hardware)
+    use_controllers:=$(arg use_manipulation_controllers)
+    sim_ignition:=false
+    sim_gazebo:=false
+    sim_isaac:=false
+    fake_sensor_commands:=false
+    isaac_joint_commands:=/isaac_joint_commands
+    isaac_joint_states:=/isaac_joint_states
+    gripper_port:=/dev/ttyUSB_ESP32">
+
+
+      <!-- Gripper Base -->
+    <joint name="${name}_gripper_base_joint" type="fixed">
+      <xacro:insert_block name="origin"/>
+      <parent link="${parent_link}" />
+      <child link="${name}_gripper_base_link" />
+    </joint>  
+
+    <link name="${name}_gripper_base_link">
+      <inertial>
+        <origin xyz="-0.0001329996707701553 0.002865671171653936 -0.0015906571850729278" rpy="0 0 0"/>
+        <mass value="0.180580611267487"/>
+        <inertia ixx="7.1e-05" iyy="0.000129" izz="6e-05" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://gen3_customgripper_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="silver"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://gen3_customgripper_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${name}_gripper_bracket_1">
+      <inertial>
+        <origin xyz="-9.601662046312867e-05 0.032882220996709954 6.137703874389833e-07" rpy="0 0 0"/>
+        <mass value="0.40924355841413906"/>
+        <inertia ixx="0.000251" iyy="0.000142" izz="0.000363" ixy="1.5e-05" iyz="-0.0" ixz="-0.0"/>
+      </inertial>
+      <visual>
+        <origin xyz="-0.0 -0.0054 0.0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://gen3_customgripper_description/meshes/gripper_bracket_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="silver"/>
+      </visual>
+      <collision>
+        <origin xyz="-0.0 -0.0054 0.0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://gen3_customgripper_description/meshes/gripper_bracket_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${name}_body_1">
+      <inertial>
+        <origin xyz="0.010310303274532123 1.220788949834144 0.0435990483039293" rpy="0 0 0"/>
+        <mass value="0.1288765625659164"/>
+        <inertia ixx="0.000114" iyy="1.7e-05" izz="0.000111" ixy="4e-06" iyz="-1e-06" ixz="-0.0"/>
+      </inertial>
+      <visual>
+        <origin xyz="-0.027 1.1766 0.043182" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://gen3_customgripper_description/meshes/Body_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="silver"/>
+      </visual>
+      <collision>
+        <origin xyz="-0.027 1.1766 0.043182" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://gen3_customgripper_description/meshes/Body_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${name}_robot_head_bottom_1">
+      <inertial>
+        <origin xyz="2.8667306329021107e-08 -0.048555424875427064 -0.03344350346565845" rpy="0 0 0"/>
+        <mass value="0.367341911259619"/>
+        <inertia ixx="0.000241" iyy="0.000253" izz="0.000372" ixy="0.0" iyz="4.5e-05" ixz="-0.0"/>
+      </inertial>
+      <visual>
+        <origin xyz="-0.0 0.0 0.0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://gen3_customgripper_description/meshes/robot_head_bottom_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="silver"/>
+      </visual>
+      <collision>
+        <origin xyz="-0.0 0.0 0.0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://gen3_customgripper_description/meshes/robot_head_bottom_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${name}_Fingend_Solid_1">
+      <inertial>
+        <origin xyz="0.0012628510164904988 0.02462605135607185 -0.007982366200584911" rpy="0 0 0"/>
+        <mass value="0.07245729817267833"/>
+        <inertia ixx="3.1e-05" iyy="2e-06" izz="3.2e-05" ixy="1e-06" iyz="0.0" ixz="-0.0"/>
+      </inertial>
+      <visual>
+        <origin xyz="-0.04035 -0.100878 -0.008" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://gen3_customgripper_description/meshes/Fingend_Solid_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="silver"/>
+      </visual>
+      <collision>
+        <origin xyz="-0.04035 -0.100878 -0.008" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://gen3_customgripper_description/meshes/Fingend_Solid_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${name}_Fing_fing_end_1">
+      <inertial>
+        <origin xyz="-0.01572176400016241 0.021263775053034395 -0.0020000000000009724" rpy="0 0 0"/>
+        <mass value="0.028315512706280806"/>
+        <inertia ixx="7e-06" iyy="6e-06" izz="1.4e-05" ixy="6e-06" iyz="0.0" ixz="-0.0"/>
+      </inertial>
+      <visual>
+        <origin xyz="-0.041781 -0.160861 -0.0025" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://gen3_customgripper_description/meshes/Fing_fing_end_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="silver"/>
+      </visual>
+      <collision>
+        <origin xyz="-0.041781 -0.160861 -0.0025" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://gen3_customgripper_description/meshes/Fing_fing_end_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${name}_cutter_blade_1">
+      <inertial>
+        <origin xyz="3.1974423109204507e-16 1.2368499746749786 -0.09744998999199322" rpy="0 0 0"/>
+        <mass value="4.431442750000001"/>
+        <inertia ixx="0.011905" iyy="0.006187" izz="0.01763" ixy="0.0" iyz="-0.0" ixz="-0.0"/>
+      </inertial>
+      <visual>
+        <origin xyz="-0.0 1.225225 -0.039725" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://gen3_customgripper_description/meshes/cutter_blade_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="silver"/>
+      </visual>
+      <collision>
+        <origin xyz="-0.0 1.225225 -0.039725" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://gen3_customgripper_description/meshes/cutter_blade_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${name}_cutterbase_1">
+      <inertial>
+        <origin xyz="2.842170943040401e-16 -2.5325021415015248e-08 -0.050799989991993214" rpy="0 0 0"/>
+        <mass value="18.009383336000006"/>
+        <inertia ixx="0.062936" iyy="0.039698" izz="0.07165" ixy="0.0" iyz="0.0" ixz="0.0"/>
+      </inertial>
+      <visual>
+        <origin xyz="-0.0 -0.011625 0.070225" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://gen3_customgripper_description/meshes/cutterbase_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="silver"/>
+      </visual>
+      <collision>
+        <origin xyz="-0.0 -0.011625 0.070225" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://gen3_customgripper_description/meshes/cutterbase_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${name}_robot_head_top_1">
+      <inertial>
+        <origin xyz="-1.870549808277653e-08 0.012349949977327496 0.021798306472536725" rpy="0 0 0"/>
+        <mass value="0.1378186553391726"/>
+        <inertia ixx="2.9e-05" iyy="0.000156" izz="0.00014" ixy="-0.0" iyz="0.0" ixz="-0.0"/>
+      </inertial>
+      <visual>
+        <origin xyz="-0.0 0.07775 0.0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://gen3_customgripper_description/meshes/robot_head_top_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="silver"/>
+      </visual>
+      <collision>
+        <origin xyz="-0.0 0.07775 0.0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://gen3_customgripper_description/meshes/robot_head_top_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${name}_rigid_1" type="fixed">
+      <origin xyz="0.0 0.0054 0.0" rpy="0 0 0"/>
+      <parent link="${name}_gripper_base_link"/>
+      <child link="${name}_gripper_bracket_1"/>
+    </joint>
+
+    <joint name="${name}_rigid_2" type="fixed">
+      <origin xyz="0.027 -1.182 -0.043182" rpy="0 0 0"/>
+      <parent link="${name}_gripper_bracket_1"/>
+      <child link="${name}_body_1"/>
+    </joint>
+
+    <joint name="${name}_rigid_4" type="fixed">
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+      <parent link="${name}_gripper_base_link"/>
+      <child link="${name}_robot_head_bottom_1"/>
+    </joint>
+
+    <joint name="${name}_right_finger_joint" type="revolute">
+      <origin xyz="0.01335 1.277478 0.051182" rpy="0 0 0"/>
+      <parent link="${name}_body_1"/>
+      <child link="${name}_Fingend_Solid_1"/>
+      <axis xyz="0.0 0.0 -1.0"/>
+      <limit upper="0.0" lower="-1.658063" effort="100" velocity="100"/>
+    </joint>
+
+    <joint name="${name}_rigid_6" type="fixed">
+      <origin xyz="0.001431 0.059983 -0.0055" rpy="0 0 0"/>
+      <parent link="${name}_Fingend_Solid_1"/>
+      <child link="${name}_Fing_fing_end_1"/>
+    </joint>
+
+    <joint name="${name}_rigid_7" type="fixed">
+      <origin xyz="0.0 -1.225225 0.039725" rpy="0 0 0"/>
+      <parent link="${name}_robot_head_bottom_1"/>
+      <child link="${name}_cutter_blade_1"/>
+    </joint>
+
+    <joint name="${name}_cutter_joint" type="prismatic">
+      <!-- <origin xyz="0.0 1.23685 -0.10995" rpy="0 0 0"/> -->
+      <origin xyz="0 1.226325 -0.10995" rpy="0 0 0"/>
+      <parent link="${name}_cutter_blade_1"/>
+      <child link="${name}_cutterbase_1"/>
+      <axis xyz="1.0 0.0 0.0"/>
+      <limit upper="0.005" lower="-0.005" effort="100" velocity="100"/>
+    </joint>
+
+    <joint name="${name}_rigid_9" type="fixed">
+      <origin xyz="0.0 -0.07775 0.0" rpy="0 0 0"/>
+      <parent link="${name}_robot_head_bottom_1"/>
+      <child link="${name}_robot_head_top_1"/>
+    </joint>
+    <xacro:if value="${use_controllers}">
+      <ros2_control name="${name}_hardware" type="system">
+          <hardware>
+              <xacro:if value="${use_fake_hardware}">
+                  <plugin>mock_components/GenericSystem</plugin>
+                  <param name="fake_sensor_commands">${fake_sensor_commands}</param>
+                  <param name="state_following_offset">0.0</param>
+              </xacro:if>
+              <xacro:unless value="${use_fake_hardware}">
+                  <plugin>esp32_gripper_driver/Esp32GripperHardware</plugin>
+                  <param name="device">/dev/ttyUSB_ESP32</param>
+                  <param name="port">${gripper_port}</param>
+              </xacro:unless>
+          </hardware>
+          <joint name="${name}_right_finger_joint">
+            <command_interface name="position" />
+            <state_interface name="position">
+              <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="velocity"/>
+          </joint>
+          <joint name="${name}_cutter_joint">
+            <command_interface name="position"/>
+            <state_interface name="position">
+              <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="velocity"/>
+          </joint>
+      </ros2_control>
+    </xacro:if>
+  </xacro:macro>
+</robot>

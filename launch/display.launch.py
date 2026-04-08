@@ -6,8 +6,8 @@ import xacro
 
 def generate_launch_description():
     # 1. Specify the package and file names
-    pkg_name = 'manipulator_description'
-    file_subpath = 'urdf/robot_assembly.xacro' # Ensure this matches your filename
+    pkg_name = 'gen3_customgripper_description'
+    file_subpath = 'urdf/gen3_custom_gripper.urdf.xacro' # Ensure this matches your filename
 
     # 2. Process the Xacro file
     xacro_file = os.path.join(get_package_share_directory(pkg_name), file_subpath)
